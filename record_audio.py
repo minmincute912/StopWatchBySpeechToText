@@ -1,5 +1,6 @@
 import pyaudio
 import wave
+import numpy as np
 
 class AudioRecorder:
     def __init__(self):
@@ -25,6 +26,9 @@ class AudioRecorder:
         while self.is_recording:
             data = self.stream.read(self.CHUNK)
             self.frames.append(data)
+    
+    def get_frames(self):
+        return np.frombuffer(b''.join(self.frames), dtype = np.int16)
 
     def stop_recording(self):
         self.is_recording = False
@@ -42,3 +46,6 @@ class AudioRecorder:
     def reset_recording(self):
         self.frames = []
         print("Recording reset")
+
+    def terminate(self):
+        self.p.terminate()
